@@ -1,75 +1,195 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style2.css"/>
+
+  <style>
+    :root{
+      --danger-bg: #ffe8e8;
+      --danger-border: #ffb4b4;
+      --danger-text: #a40000;
+    }
+    .admin-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap:1.25rem; padding: 1rem 1.25rem;
+    }
+    .admin-section.compact{ padding: 1rem 1rem; }
+    .section-toolbar{
+      display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.5rem;
+    }
+    .soft-divider{ border-top:1px dashed var(--border); margin:.5rem 0 1rem; }
+    .item-row{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; padding:.5rem 0; border-bottom:1px dashed var(--border); }
+    .product-item input{ max-width: 140px; }
+    .product-item > div:first-child{ display:flex; flex-wrap:wrap; gap:.5rem; }
+    .product-item > div:last-child{ display:flex; gap:.5rem; }
+    #unsaved-banner{
+      position: sticky; bottom: 0; left:0; right:0;
+      background: var(--danger-bg); border-top: 1px solid var(--danger-border);
+      padding: .7rem .95rem; display:none; align-items:center; justify-content:space-between; gap:.75rem;
+      z-index: 50; border-radius: 0 0 var(--radius) var(--radius);
+      color: var(--danger-text);
+    }
+    #unsaved-banner.show{ display:flex; }
+    #unsaved-banner .muted{ font-size:.98rem; font-weight:700; }
+    #unsaved-banner .actions{ display:flex; gap:.5rem; }
+
+    .year-picker{ display:flex; align-items:center; gap:.5rem; }
+    #year-select{ padding:.35rem .6rem; border:1px solid var(--border); border-radius:.5rem; background:var(--surface); }
+    #months-row{ display:flex; gap:.5rem; flex-wrap:wrap; margin:.25rem 0 .75rem; }
+    .chip{
+      background: var(--surface); border:1px solid var(--border); padding:.35rem .65rem;
+      border-radius:999px; font-size:.9rem; cursor:pointer;
+    }
+    .chip.active{ background: var(--primary-weak); border-color: var(--primary); }
+    #month-daily-list ul{ margin:.5rem 0 0; padding-left:1rem; }
+    #month-daily-list li{ margin:.15rem 0; }
+    #login-status{ margin-top:.5rem; font-size:.9rem; color: var(--text-muted); }
+
+    .btn-row{ display:flex; gap:.5rem; flex-wrap:wrap; }
+  </style>
 </head>
 <body>
 
-    <div id="admin-login-screen" class="full-screen-container">
-        <div class="login-box">
-            <h1>Admin Login</h1>
-            <input type="password" id="admin-password-input" placeholder="Enter Admin Password">
-            <button id="admin-login-button">Login</button>
-            <p id="admin-login-error" class="error-message"></p>
+  <!-- Admin Login -->
+  <div id="admin-login-screen" class="full-screen-container">
+    <div class="login-box">
+      <h2>Admin Girişi</h2>
+      <input type="password" id="admin-password-input" placeholder="Admin şifresi"/>
+      <button id="admin-login-button">Giriş Yap</button>
+      <div id="login-status">Ayarlar yükleniyor…</div>
+      <div id="admin-login-error" class="error-message"></div>
+    </div>
+  </div>
+
+  <!-- Admin Panel -->
+  <div id="admin-panel" class="hidden">
+    <header>
+      <div class="section-toolbar" style="margin: .5rem 1rem;">
+        <h1 style="margin:0;">Admin Panel</h1>
+        <div class="btn-row">
+          <!-- index’tekiyle aynı id -->
+          <button id="theme-btn" title="Temayı değiştir">🎨 Tema</button>
         </div>
+      </div>
+    </header>
+
+    <!-- Kaydedilmedi Uyarısı -->
+    <div id="unsaved-banner">
+      <span class="muted">⚠️ Kaydetmediniz! Değişiklikler kaydedilmedi.</span>
+      <div class="actions">
+        <button id="discard-all-btn" class="danger-btn">Vazgeç</button>
+        <button id="save-all-btn" class="success-btn">Değişiklikleri Kaydet</button>
+      </div>
     </div>
 
-    <div id="admin-panel" class="hidden">
-        <header><h1>Admin Panel</h1></header>
-        <main class="admin-main">
+    <main class="admin-main admin-grid">
+      <!-- Genel Ayarlar -->
+      <section class="admin-section compact">
+        <div class="section-toolbar">
+          <h2 style="margin:0;">Genel Ayarlar</h2>
+          <button id="save-settings-btn">Kaydet</button>
+        </div>
+        <div class="soft-divider"></div>
+        <label for="coffeehouse-name-input">Kafe Adı</label>
+        <input type="text" id="coffeehouse-name-input"/>
+        <label> Kullanıcı Girişi Aktif
+          <input type="checkbox" id="login-toggle" style="margin-left:.5rem; vertical-align:middle;"/>
+        </label>
+        <label for="user-password-input">Kullanıcı Girişi Şifresi</label>
+        <input type="text" id="user-password-input" placeholder="(değiştirmek isterseniz yazın)"/>
+        <label for="admin-password-change-input">Yeni Admin Şifresi</label>
+        <input type="text" id="admin-password-change-input" placeholder="(değiştirmek isterseniz yazın)"/>
+      </section>
 
-            <section class="admin-section">
-                <h2>General Settings</h2>
-                <label for="coffeehouse-name-input">Coffeehouse Name:</label>
-                <input type="text" id="coffeehouse-name-input">
-                <hr>
-                <label>Enable User Login:</label>
-                <input type="checkbox" id="login-toggle">
-                <hr>
-                <label for="user-password-input">User Login Password:</label>
-                <input type="text" id="user-password-input">
-                <hr>
-                <label for="admin-password-change-input">New Admin Password:</label>
-                <input type="text" id="admin-password-change-input">
-                <hr>
-                <button id="save-settings-btn">Save General Settings</button>
-            </section>
+      <!-- Masa Yönetimi -->
+      <section class="admin-section compact">
+        <div class="section-toolbar">
+          <h2 style="margin:0;">Masa Yönetimi</h2>
+          <button id="add-table-btn">+ Masa Ekle</button>
+        </div>
+        <div id="table-management-list"></div>
+      </section>
 
-            <section class="admin-section">
-                <h2>Table Management</h2>
-                <div id="table-management-list"></div>
-                <button id="add-table-btn">Add New Table</button>
-            </section>
+      <!-- Ürün & Stok -->
+      <section class="admin-section compact" style="grid-column: 1 / -1;">
+        <div class="section-toolbar">
+          <h2 style="margin:0;">Ürünler & Stok</h2>
+        </div>
+        <div id="product-management-list"></div>
 
-<section class="admin-section">
-    <h2>Products & Stock</h2>
-    <div id="product-management-list"></div>
-    
-    <h3>Add New Product</h3>
-    <input type="text" id="new-product-name" placeholder="Product Name">
-    <input type="number" id="new-product-price" placeholder="Price" step="0.01">
-    <input type="number" id="new-product-stock" placeholder="Initial Stock"> 
-    <button id="add-product-btn">Add Product</button>
-</section>
+        <div class="soft-divider"></div>
+        <div class="section-toolbar">
+          <h3 style="margin:0;">Yeni Ürün Ekle</h3>
+          <button id="add-product-btn">Ekle</button>
+        </div>
+        <div class="item-row" style="border-bottom:none;">
+          <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
+            <input type="text" id="new-product-name" placeholder="Ürün Adı"/>
+            <input type="number" id="new-product-price" placeholder="Fiyat" step="0.01"/>
+            <input type="number" id="new-product-stock" placeholder="Stok"/>
+          </div>
+        </div>
+      </section>
 
-            <section class="admin-section">
-                <h2>Daily Analysis</h2>
-                <p><strong>Total Revenue:</strong> $<span id="total-revenue">0.00</span></p>
-                <p><strong>Total Expenses:</strong> $<span id="total-expenses">0.00</span></p>
-                <p><strong>Profit:</strong> $<span id="total-profit">0.00</span></p>
-                <button id="reset-daily-btn" class="danger-btn">Reset Daily Data</button>
-            </section>
-        </main>
+      <!-- Aylık Analiz -->
+      <section class="admin-section compact" style="grid-column: 1 / -1;">
+        <div class="section-toolbar">
+          <h2 style="margin:0;">Aylık Analiz</h2>
+          <div class="year-picker">
+            <label for="year-select" style="font-weight:600;">Yıl:</label>
+            <select id="year-select"></select>
+          </div>
+        </div>
+        <div id="months-row"></div>
+        <canvas id="monthly-chart" height="130"></canvas>
+        <div class="soft-divider"></div>
+        <div id="month-details">
+          <p><strong>Ay Toplam Gelir:</strong> <span id="month-total">$0.00</span></p>
+          <p><strong>En Çok Kazanılan Gün:</strong> <span id="month-best-day">—</span></p>
+          <p><strong>En Çok Satılan Ürün:</strong> <span id="month-best-product">—</span></p>
+          <div id="month-daily-list"></div>
+        </div>
+      </section>
+
+      <!-- Günlük Analiz -->
+      <section class="admin-section compact">
+        <h2>Günlük Analiz</h2>
+        <p><strong>Toplam Gelir:</strong> $<span id="total-revenue">0.00</span></p>
+        <p><strong>Toplam Gider:</strong> $<span id="total-expenses">0.00</span></p>
+        <p><strong>Kâr:</strong> $<span id="total-profit">0.00</span></p>
+        <div class="btn-row">
+          <button id="end-day-btn" class="success-btn">Günü Bitir</button>
+          <button id="reset-daily-btn" class="danger-btn">Günlük Veriyi Sıfırla</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- SIFIRLAMA ONAY MODALİ -->
+  <div id="reset-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="close-reset-modal">&times;</span>
+      <h3>⚠️ Geri alınamaz!</h3>
+      <p>Bugünün verilerini <strong>grafikler dahil</strong> tüm kayıtlardan sileceksiniz.</p>
+      <p><strong>Onaylamak için aşağıya <code>ONAYLA</code> yazın.</strong></p>
+      <input type="text" id="reset-confirm-input" placeholder="ONAYLA yazın"/>
+      <div class="modal-actions">
+        <button id="reset-cancel-btn">Vazgeç</button>
+        <button id="reset-confirm-btn" class="danger-btn" disabled>Veriyi Sil</button>
+      </div>
     </div>
+  </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    
-    <script src="admin.js"></script> 
-</body>
-</html>
+  <!-- Firebase (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Admin logic -->
+  <script src="admin2.js"></script>
 </body>
 </html>
