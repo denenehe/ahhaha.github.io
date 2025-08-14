@@ -1,0 +1,30 @@
+{
+  "config": {
+    "coffeehouseName": "The Dev's Cafe",
+    "isLoginEnabled": false,
+    "userPassword": "123",
+    "adminPassword": "admin"
+  },
+  "products": {
+    "prod1": { "name": "Espresso", "price": 2.50, "stock": 100 },
+    "prod2": { "name": "Latte", "price": 3.50, "stock": 100 },
+    "prod3": { "name": "Croissant", "price": 2.75, "stock": 50 }
+  },
+  "tables": {
+    "table1": { "name": "Table 1", "order": null, "status": "free" },
+    "table2": { "name": "Table 2", "order": null, "status": "free" },
+    "table3": { "name": "Table 3", "order": null, "status": "free" },
+    "table4": { "name": "Table 4", "order": null, "status": "free" },
+    "table5": { "name": "Table 5", "order": null, "status": "free" },
+    "table6": { "name": "Table 6", "order": null, "status": "free" },
+    "table7": { "name": "Table 7", "order": null, "status": "free" },
+    "table8": { "name": "Table 8", "order": null, "status": "free" },
+    "table9": { "name": "Table 9", "order": null, "status": "free" },
+    "table10": { "name": "Table 10", "order": null, "status": "free" },
+    "table11": { "name": "Table 11", "order": null, "status": "free" },
+    "table12": { "name": "Table 12", "order": null, "status": "free" }
+  },
+  "dailyBook": {
+    "expenses": {}
+  }
+}
