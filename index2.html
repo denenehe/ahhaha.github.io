@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coffeehouse</title>
+  <link rel="stylesheet" href="style2.css"/>
+</head>
+<body>
+
+  <div id="login-screen" class="full-screen-container">
+    <div class="login-box">
+      <h1 id="login-title">Cafe Login</h1>
+      <input type="password" id="user-password-input" placeholder="Enter Password" autocomplete="current-password"/>
+      <button id="login-button" disabled>Enter</button>
+      <p id="login-error" class="error-message"></p>
+    </div>
+  </div>
+
+  <div id="app-container" class="hidden">
+    <header>
+      <h1 id="app-title">Coffeehouse</h1>
+      <div>
+        <button id="menu-btn">📋 Menu</button>
+        <button id="cashbook-btn">💰 Daily Cashbook</button>
+      </div>
+    </header>
+
+    <main id="table-grid-container"></main>
+  </div>
+
+  <div id="order-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="close-order-modal">&times;</span>
+      <h2 id="order-modal-title">Table Order</h2>
+
+      <div id="existing-order-details"></div>
+
+      <div id="add-items-section">
+        <h3>Add to Order</h3>
+        <select id="product-select"></select>
+        <input type="number" id="quantity-input" value="1" min="1"/>
+        <input type="text" id="order-notes" placeholder="Special notes (e.g., extra hot)"/>
+        <button id="add-to-order-btn">Add Product</button>
+        <hr/>
+        <h3>Create Custom Item</h3>
+        <input type="text" id="custom-item-name" placeholder="Custom item name"/>
+        <input type="number" id="custom-item-price" placeholder="Price"/>
+        <button id="add-custom-item-btn">Add Custom Item</button>
+      </div>
+
+      <hr/>
+
+      <div class="modal-actions">
+        <button id="confirm-order-btn">✅ Confirm Order</button>
+        <button id="settle-order-btn" class="danger-btn">💵 Settle & Pay</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="menu-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="close-menu-modal">&times;</span>
+      <h2>Our Menu</h2>
+      <ul id="menu-list"></ul>
+    </div>
+  </div>
+
+  <div id="cashbook-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="close-cashbook-modal">&times;</span>
+      <h2>Daily Cashbook (Expenses)</h2>
+      <div id="cashbook-list"></div>
+      <h3>Add Expense</h3>
+      <input type="text" id="expense-name" placeholder="Expense description (e.g., Milk delivery)"/>
+      <input type="number" id="expense-amount" placeholder="Amount"/>
+      <button id="add-expense-btn">Add Expense</button>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js" defer></script>
+  <script src="app2.js" defer></script>
+</body>
+</html>
