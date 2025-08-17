@@ -79,9 +79,9 @@ async function sha256Hex(text){
 }
 
 /** Şifre doğrulama:
- *  - DB "sha:" / "sha256:" ile başlıyorsa: hash karşılaştır
- *  - "plain:" ile başlıyorsa: düz karşılaştır (prefix'i at)
- *  - prefix yoksa: düz karşılaştır (DB’de ne yazıyorsa o)
+ * - DB "sha:" / "sha256:" ile başlıyorsa: hash karşılaştır
+ * - "plain:" ile başlıyorsa: düz karşılaştır (prefix'i at)
+ * - prefix yoksa: düz karşılaştır (DB’de ne yazıyorsa o)
  */
 async function verifyPassword(entered, stored){
   if (!stored) return false;
@@ -166,6 +166,7 @@ function loadAdminPanelData(){
   // Buttons & events
   qs('save-settings-btn').addEventListener('click', () => saveGeneralSettings(true));
   qs('add-table-btn').addEventListener('click', addTable);
+  qs('add-product-btn').addEventListener('click', addProduct); // <-- YENİ EKLENEN SATIR
   qs('end-day-btn').addEventListener('click', endDayOpenConfirm);
   qs('reset-daily-btn').addEventListener('click', openResetModal);
 
@@ -307,6 +308,35 @@ function renderProductManagement(products){
     c.appendChild(div);
   });
 }
+
+// YENİ EKLENEN FONKSİYON
+function addProduct() {
+  const nameEl = qs('new-product-name');
+  const priceEl = qs('new-product-price');
+  const stockEl = qs('new-product-stock');
+
+  const name = (nameEl.value || '').trim();
+  const price = Number.parseFloat(priceEl.value);
+  const stock = Number.parseInt(stockEl.value, 10);
+
+  if (!name || !Number.isFinite(price) || price <= 0 || !Number.isFinite(stock) || stock < 0) {
+    alert('Lütfen geçerli bir ürün adı, fiyatı ve stok miktarı girin.');
+    return;
+  }
+
+  const newProductId = `prod${Date.now()}`;
+  const productData = { name, price, stock };
+
+  db.ref(`products/${newProductId}`).set(productData)
+    .then(() => {
+      // Başarılı ekleme sonrası inputları temizle
+      nameEl.value = '';
+      priceEl.value = '';
+      stockEl.value = '';
+    })
+    .catch(e => alert(`Hata: ${e.message}`));
+}
+
 function readProductRow(pid){
   const row = productListContainer.querySelector(`.product-item[data-product-id="${pid}"]`);
   if (!row) return null;
